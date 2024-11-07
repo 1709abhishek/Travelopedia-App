@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
+import { useNavigate } from 'react-router-dom'
 import { AccountContext } from "../contexts/AccountContext.jsx"
 import Header from "./Header.jsx"
 
@@ -69,6 +70,8 @@ const AccountPage = () => {
     }
   }
 
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen bg-black text-white">
       <header className="flex h-16 items-center justify-between bg-zinc-900">
@@ -101,7 +104,7 @@ const AccountPage = () => {
                     {accountState.wishlist.length} places in wishlist
                   </div>
                 </div>
-                <Button className="w-full bg-blue-600 hover:bg-blue-700">View Public Profile</Button>
+                <Button className="w-full bg-blue-600 hover:bg-blue-700" onClick={()=>navigate('/my-journey')}>View Public Profile</Button>
               </CardContent>
             </Card>
             <Card className="bg-zinc-900 border-zinc-800">
