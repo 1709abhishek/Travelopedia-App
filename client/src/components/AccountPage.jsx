@@ -18,7 +18,6 @@ const AccountPage = () => {
     setFirstName,
     setLastName,
     setPhoneNumber,
-    setEmail,
     setCity,
     setCountry,
     setBio,
@@ -87,7 +86,7 @@ const AccountPage = () => {
                   <AvatarFallback className="bg-zinc-800 text-xl">{accountState.firstName[0]}{accountState.lastName[0]}</AvatarFallback>
                 </Avatar>
                 <h2 className="text-xl font-bold">{accountState.firstName} {accountState.lastName}</h2>
-                <p className="text-sm text-zinc-400 mb-4">Software Developer</p>
+                <p className="text-sm text-zinc-400 mb-4">@{accountState.username}</p>
                 <div className="w-full space-y-2 mb-4">
                   <div className="flex items-center gap-2 text-sm">
                     <MapPin className="h-4 w-4" />
@@ -150,17 +149,7 @@ const AccountPage = () => {
                       />
                     </div>
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email Address</Label>
-                    <Input
-                      id="email"
-                      name="email"
-                      type="email"
-                      value={accountState.email}
-                      onChange={(e) => handleInputChange(e, setEmail)}
-                      className="bg-zinc-800 border-zinc-700"
-                    />
-                  </div>
+                  
                   <div className="space-y-2">
                     <Label htmlFor="phoneNumber">Phone Number</Label>
                     <Input
