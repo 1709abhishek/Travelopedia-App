@@ -46,13 +46,20 @@ function ExplorePage() {
     console.log(chatCompletion)
     const fetchItinerary = async () => {
       // const stream = await getGroqChatStream();
+      let responseFinal = "";
       for await (const chunk of chatCompletion) {
         // Print the completion returned by the LLM.
-        console.log(chunk.choices[0]?.delta?.content || "");
-        const response = await getGroqChatStream(chunk.choices[0]?.delta?.content);
+        responseFinal+=chunk.choices[0]?.delta?.content;
+        // const response = await getGroqChatStream(chunk.choices[0]?.delta?.content);
+        // console.log(response)
+        // Update the messages state with the new message
         
-        await setMessages([...messages, { role: 'user', content:  response}])
       }
+
+      setMessages(prevMessages => [
+        ...prevMessages,
+        { role: 'assistant', content: responseFinal }
+      ]);
     }
     fetchItinerary().catch(console.error);
   }
@@ -60,7 +67,7 @@ function ExplorePage() {
   const getGroqChatStream = async (msg) => {
     let response = "";
     for(const message of msg || ""){
-      response += message.text;
+      response += message;
     }
     return response;
   }
@@ -69,6 +76,7 @@ function ExplorePage() {
 
   return (
     <div className="flex h-screen bg-black text-gray-300">
+      
       {/* Sidebar */}
       <div className="w-64 bg-gray-900 border-r border-gray-800 flex flex-col">
         <div className="p-4 border-b border-gray-800">
