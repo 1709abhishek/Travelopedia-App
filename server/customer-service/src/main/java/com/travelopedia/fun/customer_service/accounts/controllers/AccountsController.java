@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,8 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 
 import com.travelopedia.fun.customer_service.accounts.models.Account;
 import com.travelopedia.fun.customer_service.accounts.service.AccountsService;
+import org.springframework.security.core.Authentication;
+
 
 
 @RestController
@@ -73,11 +76,7 @@ public class AccountsController {
         return "redirect:/oauth2/authorization/google";
     }
 
-    // OAuth2 callback endpoint
-    @GetMapping("/oauth2/callback")
-    public String oauth2Callback(Model model, @AuthenticationPrincipal OidcUser principal) {
-        model.addAttribute("name", principal.getAttribute("name"));
-        return "home";
-    }
-    
+    // To check oauth2 login: http://localhost:8080/login
+    // When OAuth2 is success then it goes into CustomerController sayHello method to save user details
+
 }
