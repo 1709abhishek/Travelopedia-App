@@ -17,20 +17,23 @@ import com.travelopedia.fun.customer_service.accounts.security.JwtUtil;
 @Service
 public class AccountsService {
 
-    @Autowired
-    private AccountsRepository accountsRepository;
-
-    @Autowired
-    private JwtUtil jwtUtil;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AccountsRepository accountsRepository;
+    private final AuthenticationManager authenticationManager;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @Autowired
+    public AccountsService(AccountsRepository accountsRepository, AuthenticationManager authenticationManager) {
+        this.accountsRepository = accountsRepository;
+        this.authenticationManager = authenticationManager;
+    }
 
     public boolean isAccountRegistered(String email) {
         return accountsRepository.findByEmail(email) != null;
@@ -75,6 +78,25 @@ public class AccountsService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken);
 
+    }
+    public void saveUserDetails(String sub, String name, String email) {
+        Account account = new Account();
+        account.setName(name);
+        account.setEmail(email);
+        System.out.println("Email: " + email);
+        System.out.println("Name: " + name);
+        System.out.println("Sub: " + sub);
+        // account.setPassword(sub);
+        saveOrUpdateAccount(account);
+    }
+    public void saveOrUpdateAccount(Account account) {
+        Account existingAccount = accountsRepository.findByEmail(account.getEmail());
+        if (existingAccount != null) {
+            existingAccount.setName(account.getName());
+            accountsRepository.save(existingAccount);
+        } else {
+            accountsRepository.save(account);
+        }
     }
 
 }

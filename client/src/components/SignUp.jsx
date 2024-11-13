@@ -19,6 +19,11 @@ export default function SignUp() {
     console.log(response);
   };
 
+  const handleGoogleSignIn = () => {
+    // TODO: Add UseNavigate.
+    window.location.href = "http://localhost:8080/login";
+  };
+
   return (
     <div className="sign-in-background">
       <div className="app-name-background">Travelopedia</div>
@@ -65,6 +70,21 @@ export default function SignUp() {
                 </a>
               </p>
             </form>
+            <button onClick={handleGoogleSignIn} className="btn google-signin-btn" 
+            style={{
+                backgroundColor: "#4285f4",
+                color: "white",
+                border: "none",
+                padding: "10px",
+                marginTop: "10px",
+                cursor: "pointer",
+                fontSize: "16px",
+                borderRadius: "4px",
+                width: "70%",
+                textAlign: "center",
+              }}>
+              Sign in with Google
+            </button>
           </div>
         </div>
       </div>
