@@ -16,13 +16,15 @@ import java.util.*;
 import com.opencsv.CSVReader;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.jdbc.core.CallableStatementCreator;
+import org.springframework.stereotype.Service;
+
 import java.math.BigInteger;
 import java.math.BigDecimal;
 
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.math3.distribution.NormalDistribution;
-
+@Service
 public class TravelStatsService {
 
     private static Map<String, String> capitalToCountry = new HashMap<>();

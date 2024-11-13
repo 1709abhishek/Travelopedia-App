@@ -14,7 +14,7 @@ public class ProfileController {
 
     @Autowired
     AccountsRepository accountsRepository;
-
+    @CrossOrigin(origins = "http://localhost:5173")
     @PutMapping("/update")
     public ResponseEntity<String> updateProfile(@RequestBody Account account) {
         try {
@@ -39,7 +39,7 @@ public class ProfileController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-
+    @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("/getDetails/{email}")
     public ResponseEntity<Account> getProfileDetails(@PathVariable String email){
         try{

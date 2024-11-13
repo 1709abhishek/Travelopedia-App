@@ -24,7 +24,8 @@ const AccountPage = () => {
     setBio,
     setPlaceTravelled,
     setWishlist,
-    setTravelQuote
+    setTravelQuote,
+    setEmail
   } = useContext(AccountContext);
 
   const [countries, setCountries] = useState([]);
@@ -43,17 +44,64 @@ const AccountPage = () => {
       .catch(error => console.error('Error fetching countries:', error))
   }, [])
   
-
-
-
+  //Fetch data
+  const fetchData = async () => {
+    try {
+      const response = await fetch(`/profile/getDetails/${email}`);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      setFirstName(data.firstName);
+      setLastName(data.lastName);
+      setPhoneNumber(data.phoneNumber);
+      setCity(data.city);
+      setCountry(data.country);
+      setBio(data.bio);
+      setPlaceTravelled(data.placeTravelled);
+      setWishlist(data.wishlist);
+      setTravelQuote(data.travelQuote);
+      setEmail(data.email);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+      
+  // useEffect(() => {
+  //   fetchData();
+  // }, []); 
 
   const handleInputChange = (e, setter) => {
     const { value } = e.target
     setter(value);
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
+    const response = await fetch(`/profile/updateDetails/${email}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        firstName: accountState.firstName,
+        lastName: accountState.lastName,
+        phoneNumber: accountState.phoneNumber,
+        city: accountState.city,
+        country: accountState.country,
+        bio: accountState.bio,
+        placeTravelled: accountState.placeTravelled,
+        wishlist: accountState.wishlist,
+        travelQuote: accountState.travelQuote,
+        email: accountState.email
+      })
+    });
+    if (response.ok) {
+      alert('profile updated done successdully');
+    } else {
+      const errorData = await response.json();
+      alert(`Error occured while updating profile:${errorData.message}`);
+    }
     console.log('Updated Info: ', accountState)
   }
 

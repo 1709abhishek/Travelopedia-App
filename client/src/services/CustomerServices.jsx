@@ -25,4 +25,19 @@ export const signInService = async (email, password) => {
     }
   });
 }
+//Profile
+export const getProfileDetails = async (email) => {
+  return await axios({
+    method: 'get',
+    url: `${serviceConfig.host}/profile/getDetails/${email}`, 
+  });
+}
 
+
+export const updateProfile = async (profileData) => {
+  return await axios({
+    method: 'put',
+    url: `${serviceConfig.host}/profile/update`, 
+    data: profileData 
+  });
+}
