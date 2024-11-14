@@ -9,7 +9,7 @@ import { AccountContext } from "@/contexts/AccountContext";
 import { useNavigate } from 'react-router-dom';
 import Header from "./Header.jsx";
 
-const TravelStats = () => {
+const JourneyPage = () => {
   const {
     accountState,
   } = useContext(AccountContext);
@@ -167,4 +167,4 @@ const TravelStats = () => {
   );
 };
 
-export default TravelStats;
+export default JourneyPage;
