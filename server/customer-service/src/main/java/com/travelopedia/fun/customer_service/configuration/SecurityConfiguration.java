@@ -77,109 +77,7 @@
 //         return http.build();
 //     }
 // }
-// package com.travelopedia.fun.customer_service.configuration;
 
-// import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.context.annotation.Bean;
-// import org.springframework.context.annotation.Configuration;
-// import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-// import org.springframework.security.config.http.SessionCreationPolicy;
-// import org.springframework.security.web.SecurityFilterChain;
-// import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-// import com.travelopedia.fun.customer_service.accounts.security.JwtRequestFilter;
-
-// @Configuration
-// public class SecurityConfiguration {
-
-//     @Autowired
-//     private JwtRequestFilter jwtRequestFilter;
-
-//     @Autowired
-//     private CustomOAuth2AuthenticationSuccessHandler customOAuth2AuthenticationSuccessHandler;
-
-//     @Bean
-//     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//         http.csrf(csrf -> csrf.disable())
-//             .authorizeHttpRequests(authz -> authz
-//                 .requestMatchers("/accounts/*", "/h2-console/**", "/oauth2/**", "/login/**").permitAll()
-//                 .anyRequest().authenticated()
-//             )
-//             .sessionManagement(session -> session
-//                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//             )
-//             .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()))
-//             .oauth2Login(oauth2 -> oauth2
-//                 .defaultSuccessUrl("/accounts/home", true)
-//                 .successHandler(customOAuth2AuthenticationSuccessHandler)
-//             )
-//             .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-
-//         return http.build();
-//     }
-// }
-
-// package com.travelopedia.fun.customer_service.configuration;
-
-// import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.context.annotation.Bean;
-// import org.springframework.context.annotation.Configuration;
-// import org.springframework.security.authentication.AuthenticationManager;
-// import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-// import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-// import org.springframework.security.config.http.SessionCreationPolicy;
-// import org.springframework.security.core.userdetails.UserDetailsService;
-// import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-// import org.springframework.security.crypto.password.PasswordEncoder;
-// import org.springframework.security.web.SecurityFilterChain;
-// import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-// import com.travelopedia.fun.customer_service.accounts.security.JwtRequestFilter;
-
-// @Configuration
-// public class SecurityConfiguration {
-
-//     @Autowired
-//     private UserDetailsService userDetailsService;
-
-//     @Autowired
-//     private JwtRequestFilter jwtRequestFilter;
-
-//     @Autowired
-//     private CustomOAuth2AuthenticationSuccessHandler customOAuth2AuthenticationSuccessHandler;
-
-//     @Bean
-//     public PasswordEncoder passwordEncoder() {
-//         return new BCryptPasswordEncoder();
-//     }
-
-//     @Bean
-//     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-//         AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
-//         authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-//         return authenticationManagerBuilder.build();
-//     }
-
-//     @Bean
-//     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//         http.csrf(csrf -> csrf.disable())
-//             .authorizeHttpRequests(authz -> authz
-//                 .requestMatchers("/accounts/*", "/h2-console/**", "/oauth2/**", "/login/**").permitAll()
-//                 .anyRequest().authenticated()
-//             )
-//             .sessionManagement(session -> session
-//                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//             )
-//             .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()))
-//             .oauth2Login(oauth2 -> oauth2
-//                 .defaultSuccessUrl("/accounts/home", true)
-//                 .successHandler(customOAuth2AuthenticationSuccessHandler)
-//             )
-//             .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-
-//         return http.build();
-//     }
-// }
 package com.travelopedia.fun.customer_service.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -238,11 +136,25 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/accounts/*", "/h2-console/**", "/oauth2/**", "/login/**", "/accounts/home").permitAll()
-                        .anyRequest().authenticated()
-                ).oauth2Login(Customizer.withDefaults());
+        // http
+        //         .authorizeHttpRequests(authorize -> authorize
+        //                 .requestMatchers("/accounts/*", "/h2-console/**", "/oauth2/**", "/login/**", "/accounts/home").permitAll()
+        //                 .anyRequest().authenticated()
+        //         )
+        //         .oauth2Login(Customizer.withDefaults());
+        // return http.build();
+        http.csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests(authz -> authz
+                .requestMatchers("/sayHello", "/customer","/accounts/*").permitAll()
+                .anyRequest().authenticated()
+            )
+            // .sessionManagement(session -> session
+            //     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            // )
+            // .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()))
+            .oauth2Login(Customizer.withDefaults());
+            // .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+            
         return http.build();
     }
 

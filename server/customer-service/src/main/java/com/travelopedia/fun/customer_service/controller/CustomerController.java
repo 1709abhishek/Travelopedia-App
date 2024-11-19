@@ -23,6 +23,7 @@ public class CustomerController {
     // When oauth2 is successful, the user details are saved in the database
     @GetMapping
     public Object sayHello(Authentication authentication) {
+        // System.out.println("Authentication: " + authentication);
         OAuth2User oauth2User = (OAuth2User) authentication.getPrincipal();
 
         // Extract required details
