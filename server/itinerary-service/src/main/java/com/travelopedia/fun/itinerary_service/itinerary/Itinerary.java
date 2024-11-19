@@ -1,14 +1,13 @@
 package com.travelopedia.fun.itinerary_service.itinerary;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.travelopedia.fun.itinerary_service.trip.Trip;
 
-import jakarta.persistence.CollectionTable;
-import jakarta.persistence.ElementCollection;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -16,12 +15,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+
 @Entity
 @Table(name = "itinerary")
 @Getter
@@ -29,24 +30,21 @@ import lombok.ToString;
 @NoArgsConstructor
 @EqualsAndHashCode(of = "itineraryId")
 @ToString
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Itinerary {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long itineraryId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long itineraryId;
+	private Date date;
+	private String place;
+	@OneToMany(mappedBy = "itinerary", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@JsonIgnoreProperties("itinerary")
+	private List<Activity> schedule;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "trip_id")
+	@JsonIgnore
+	private Trip trip;
 
-    private Date date;
-    
-    private String place;
-
-    @ElementCollection
-    @CollectionTable(name = "itinerary_schedule", joinColumns = @JoinColumn(name = "itinerary_id"))
-    private List<Activity> schedule = new ArrayList<>();
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "trip_id")
-    private Trip trip;
-    
 	public Long getItineraryId() {
 		return itineraryId;
 	}
@@ -86,6 +84,5 @@ public class Itinerary {
 	public void setPlace(String place) {
 		this.place = place;
 	}
-    
-    
+
 }
