@@ -45,6 +45,10 @@ public class AccountsService {
         String newEmail = account.getEmail();
         String newEncryptedPassword = passwordEncoder.encode(account.getPassword());
 
+        System.out.println("Name: " + newName);
+        System.out.println("Email: " + newEmail);
+        System.out.println("Password: " + newEncryptedPassword);
+
         if(isAccountRegistered(newEmail)) {
             throw new IllegalArgumentException("Email is already registered");
         }

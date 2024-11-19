@@ -29,6 +29,7 @@ public class AccountsController {
     
     @PostMapping("/register")
     public ResponseEntity<String> registerAccount(@RequestBody Account account) {
+        System.out.println("Registering account: ");
         try {
             accountsService.registerAccount(account);
             return new ResponseEntity<>("Account registered successfully", HttpStatus.CREATED);
@@ -73,6 +74,7 @@ public class AccountsController {
     // OAuth2 login endpoint
     @GetMapping("/login/oauth2")
     public String oauth2Login() {
+        // System.out.println("OAuth2 login");
         return "redirect:/oauth2/authorization/google";
     }
 
