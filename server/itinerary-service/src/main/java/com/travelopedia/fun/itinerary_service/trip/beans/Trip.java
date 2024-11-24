@@ -1,47 +1,54 @@
-package com.travelopedia.fun.itinerary_service.trip;
+package com.travelopedia.fun.itinerary_service.trip.beans;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.travelopedia.fun.itinerary_service.itinerary.Itinerary;
+import com.travelopedia.fun.itinerary_service.itinerary.beans.Itinerary;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
 @Entity
 @Table(name = "trip")
-@Getter
-@Setter
-@NoArgsConstructor
-@EqualsAndHashCode(of = "tripId")
-@ToString
-@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+@Data
 public class Trip {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long tripId;
+
+	@Column(nullable = false)
 	private String country;
+
+	@Column(nullable = false)
 	private String city;
+
+	@Column(nullable = false)
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date startDate;
+
+	@Column(nullable = false)
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date endDate;
-	@OneToMany(mappedBy = "trip", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
-	private List<Itinerary> itineraries = new ArrayList<>();
+
+	@Column(length = 300)
+	private String quote;
+
+	@OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Itinerary> itineraries;
+
+	/*
+	 * TODO: Remove the manually defined getter and setter methods later on. Use
+	 * Lombok annotations.
+	 */
 
 	public Long getTripId() {
 		return tripId;
@@ -57,6 +64,14 @@ public class Trip {
 
 	public void setCountry(String country) {
 		this.country = country;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
 	}
 
 	public Date getStartDate() {
@@ -75,20 +90,20 @@ public class Trip {
 		this.endDate = endDate;
 	}
 
+	public String getQuote() {
+		return quote;
+	}
+
+	public void setQuote(String quote) {
+		this.quote = quote;
+	}
+
 	public List<Itinerary> getItineraries() {
 		return itineraries;
 	}
 
 	public void setItineraries(List<Itinerary> itineraries) {
 		this.itineraries = itineraries;
-	}
-
-	public String getCity() {
-		return city;
-	}
-
-	public void setCity(String city) {
-		this.city = city;
 	}
 
 }
