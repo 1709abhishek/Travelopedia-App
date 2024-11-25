@@ -1,22 +1,18 @@
 package com.travelopedia.fun.itinerary_service.trip.dto;
 
 import java.util.Date;
-import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.travelopedia.fun.itinerary_service.itinerary.dto.ItineraryDTO;
 
 
-public class TripDTO {
+public class TripResponse {
 	private Long tripId;
-	private String country;
+    private String country;
     private String city;
-    private String quote;
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date startDate;
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date endDate;
-    
 	public Long getTripId() {
 		return tripId;
 	}
@@ -35,12 +31,6 @@ public class TripDTO {
 	public void setCity(String city) {
 		this.city = city;
 	}
-	public String getQuote() {
-		return quote;
-	}
-	public void setQuote(String quote) {
-		this.quote = quote;
-	}
 	public Date getStartDate() {
 		return startDate;
 	}
@@ -55,6 +45,5 @@ public class TripDTO {
 	}
 	
 	
-    
 
 }
