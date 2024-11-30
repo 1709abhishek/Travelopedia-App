@@ -9,6 +9,7 @@ import JourneyPage from './components/JourneyPage.jsx';
 import LogTripPage from './components/LogTripPage.jsx';
 import SignIn from './components/SignIn.jsx';
 import SignUp from './components/SignUp.jsx';
+import Itineraries from './components/Itineraries.jsx';
 
 
 function App() {
@@ -30,7 +31,7 @@ function App() {
         <Route path="/account" element={<AccountPage></AccountPage>}></Route>
         <Route path="/contact-us" element={<ContactUsPage></ContactUsPage>}></Route>
         <Route path="/log-trip" element={<LogTripPage></LogTripPage>}></Route>
-
+        <Route path="/itineraries" element={<Itineraries></Itineraries>}></Route>
         {/* Not Found Route */}
         {/* <Route path="*" element={<NotFound />} /> */}
       </Routes>
