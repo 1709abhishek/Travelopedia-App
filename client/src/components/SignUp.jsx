@@ -2,6 +2,7 @@ import { AccountCircle, Email, Lock } from "@mui/icons-material";
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import travelPic from "../assets/travel_vertical.jpg";
+import { useAuth } from "../contexts/AuthContext";
 import { signUpService } from "../services/CustomerServices";
 import "../styles/loginpage.css";
 
@@ -10,18 +11,16 @@ export default function SignUp() {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
 
+  const {login} = useAuth();
+
   const navigate = useNavigate();
 
   const handleSignUp = async (e) => {
     e.preventDefault();
     const response = await signUpService(username, email, password);
+    login(response.data, username)
     navigate("/signin");
     console.log(response);
-  };
-
-  const handleGoogleSignIn = () => {
-    // TODO: Add UseNavigate.
-    window.location.href = "http://localhost:8080/login";
   };
 
   return (
@@ -70,21 +69,6 @@ export default function SignUp() {
                 </a>
               </p>
             </form>
-            <button onClick={handleGoogleSignIn} className="btn google-signin-btn" 
-            style={{
-                backgroundColor: "#4285f4",
-                color: "white",
-                border: "none",
-                padding: "10px",
-                marginTop: "10px",
-                cursor: "pointer",
-                fontSize: "16px",
-                borderRadius: "4px",
-                width: "70%",
-                textAlign: "center",
-              }}>
-              Sign in with Google
-            </button>
           </div>
         </div>
       </div>
