@@ -1,15 +1,19 @@
 package com.travelopedia.fun.customer_service.accounts.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+
+import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
 
 // import jakarta.annotation.Generated;
 
 @Data
 @Entity
+@Getter
+@Setter
 public class Account {
 
     @Id
@@ -27,5 +31,5 @@ public class Account {
     private String placesTravelled;
     private String wishlist;
     private String profilePicUrl;
-
 }
+

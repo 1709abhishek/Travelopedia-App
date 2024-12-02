@@ -1,22 +1,30 @@
 import { Calendar, Camera, ChevronRight, DollarSign, Globe, MapPin, Plane, Users } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { AccountContext } from "@/contexts/AccountContext";
+import { useNavigate } from 'react-router-dom';
 import Header from "./Header.jsx";
+import TravelMap from "./ui/TravelMap.tsx";
 
-const TravelStats = () => {
+const JourneyPage = () => {
+  const {
+    accountState,
+  } = useContext(AccountContext);
+  const navigate = useNavigate();
   const [userData] = useState({
-    name: "Abhishek Jain",
-    username: "Wanderlust",
-    location: "Currently in: Indiana, USA",
+    name: accountState.firstName + " " + accountState.lastName,
+    username: accountState.username,
+    location: accountState.city + ", " + accountState.country,
     travelPercentile: 95,
     milesTraveled: 50000,
-    countriesVisited: 30,
-    tripsPlanned: 5,
+    countriesVisited: accountState.placeTravelled.length,
+    tripsPlanned: accountState.wishlist.length,
   });
+
 
   return (
     <div className="homepage">
@@ -54,7 +62,7 @@ const TravelStats = () => {
             </div>
           </div>
           
-          <Button className="w-full bg-blue-600 hover:bg-blue-700">Edit Profile</Button>
+          <Button className="w-full bg-blue-600 hover:bg-blue-700" onClick={()=>navigate('/account')}>Edit Profile</Button>
         </aside>
 
         {/* Main content area */}
@@ -75,6 +83,8 @@ const TravelStats = () => {
               </p>
             </CardContent>
           </Card>
+
+          
 
           {/* Stats Grid */}
           <div className="grid gap-4 md:grid-cols-3">
@@ -107,6 +117,26 @@ const TravelStats = () => {
             </Card>
           </div>
 
+          {/* Travel Map : Places Traveled or wishlist*/}
+          <Card className="bg-zinc-900 border-zinc-800">
+  <CardHeader className="flex flex-row items-center justify-between p-4">
+    <CardTitle className="text-xl font-bold">Travel Map</CardTitle>
+    <div className="flex items-center space-x-4">
+      <div className="flex items-center">
+        <div className="w-4 h-4 bg-blue-500 rounded-full mr-2"></div>
+        <span>Traveled</span>
+      </div>
+      <div className="flex items-center">
+        <div className="w-4 h-4 bg-red-500 rounded-full mr-2"></div>
+        <span>Wishlist</span>
+      </div>
+    </div>
+  </CardHeader>
+  <CardContent>
+    <TravelMap placesTraveled={accountState.placeTravelled} wishlist={accountState.wishlist}/>
+  </CardContent>
+</Card>
+          
           {/* Recent Travels */}
           <Card className="bg-zinc-900 border-zinc-800">
             <CardHeader>
@@ -153,6 +183,7 @@ const TravelStats = () => {
               </div>
             </CardContent>
           </Card>
+          
         </div>
       </main>
     </div>
@@ -160,4 +191,4 @@ const TravelStats = () => {
   );
 };
 
-export default TravelStats;
+export default JourneyPage;

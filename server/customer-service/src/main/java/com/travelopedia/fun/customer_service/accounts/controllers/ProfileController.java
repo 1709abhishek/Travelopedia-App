@@ -1,23 +1,56 @@
 package com.travelopedia.fun.customer_service.accounts.controllers;
 
+import com.travelopedia.fun.customer_service.accounts.models.Account;
+import com.travelopedia.fun.customer_service.accounts.repository.AccountsRepository;
+import com.travelopedia.fun.customer_service.accounts.service.AccountsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.travelopedia.fun.customer_service.accounts.models.Profile;
-import com.travelopedia.fun.customer_service.accounts.service.ProfileService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/profile")
+@RequestMapping("/profile")
 public class ProfileController {
 
     @Autowired
-    private ProfileService profileService;
+    AccountsRepository accountsRepository;
 
-    @GetMapping("/{accountId}")
-    public Profile getProfile(@PathVariable int accountId) {
-        return profileService.getProfileData(accountId);
+    @PutMapping("/update")
+    public ResponseEntity<String> updateProfile(@RequestBody Account account) {
+        try {
+            Account currentAccount=accountsRepository.findByEmail(account.getEmail());
+            if(currentAccount==null){
+                throw new IllegalArgumentException("Account not found");
+            }
+            System.out.println("Updating profile for account: "+currentAccount.getEmail());
+            currentAccount.setName(account.getName());
+            currentAccount.setPhoneNumber(account.getPhoneNumber());
+            currentAccount.setCity(account.getCity());
+            currentAccount.setCountry(account.getCountry());
+            currentAccount.setBio(account.getBio());
+            currentAccount.setFavTravelQuote(account.getFavTravelQuote());
+            currentAccount.setPlacesTravelled(account.getPlacesTravelled());
+            currentAccount.setWishlist(account.getWishlist());
+            currentAccount.setProfilePicUrl(account.getProfilePicUrl());
+            accountsRepository.save(currentAccount);
+
+            return new ResponseEntity<>("Profile updated successfully", HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/{email}")
+    public ResponseEntity<Account> getProfileDetails(@PathVariable String email){
+        System.out.println("Getting profile details for account: "+email);
+        try{
+            Account currentAccount=accountsRepository.findByEmail(email);
+            if(currentAccount==null){
+                throw new IllegalArgumentException("Account not found");
+            }
+            return new ResponseEntity<>(currentAccount,HttpStatus.OK);
+        }catch(IllegalArgumentException e){
+            return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
+        }
     }
 }
