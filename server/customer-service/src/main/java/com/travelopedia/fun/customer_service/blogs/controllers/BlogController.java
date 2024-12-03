@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +22,8 @@ import com.travelopedia.fun.customer_service.blogs.services.BlogService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import com.travelopedia.fun.customer_service.accounts.service.AccountsService;
+
 
 @RestController
 @RequestMapping("/blogs")
@@ -29,18 +32,29 @@ public class BlogController {
     @Autowired
     private BlogService blogService;
 
+    @Autowired
+    private AccountsService accountsService;
+
+    // Create a new blog
     @PostMapping("/create")
-    public ResponseEntity<Blog> createBlog(@RequestBody Blog blog) {
-        Blog createdBlog = blogService.createBlog(blog);
+    public ResponseEntity<Blog> createBlog(@RequestBody Blog blog, HttpServletRequest request) {
+        System.out.println("Control flow in createBlog method");
+        String authorizationHeader = request.getHeader("Authorization");
+        String username = accountsService.authenticateToken(authorizationHeader);
+        Blog createdBlog = blogService.createBlog(blog, username);
         return ResponseEntity.ok(createdBlog);
     }
 
-    @PostMapping("/update/{blogId}")
-    public ResponseEntity<Blog> updateBlog(@PathVariable int blogId, @RequestBody Blog updatedBlog) {
-        Blog blog = blogService.updateBlog(blogId, updatedBlog);
-        return ResponseEntity.ok(blog);
+    // Update an existing blog
+    @PutMapping("/update/{blogId}")
+    public ResponseEntity<BlogDTO> updateBlog(@PathVariable int blogId, @RequestBody Blog updatedBlog, HttpServletRequest request) {
+        String authorizationHeader = request.getHeader("Authorization");
+        String username = accountsService.authenticateToken(authorizationHeader);
+        BlogDTO blogDTO = blogService.updateBlog(blogId, updatedBlog, username);
+        return ResponseEntity.ok(blogDTO);
     }
 
+    // Get all blogs
     @GetMapping("/all")
     public ResponseEntity<?> getAllBlogs(HttpServletRequest request) {
 
@@ -51,60 +65,37 @@ public class BlogController {
         }
         
         System.out.println("Control flow in getAllBlogs method");
-        List<Blog> blogs = blogService.getAllBlogs();
-        System.out.println("Size of blogs: " + blogs.size());
-        for (Blog blog : blogs) {
-            System.out.println(blog);
-        }
-        List<BlogDTO> blogDTOs = blogs.stream().map(blog -> {
-            BlogDTO dto = new BlogDTO();
-            dto.setBlogId((long)blog.getBlogId());
-            dto.setTitle(blog.getTitle());
-            dto.setContent(blog.getContent());
-            dto.setTags(blog.getTags());
-            dto.setCreatedAt(blog.getCreatedAt());
-            dto.setUpdatedAt(blog.getUpdatedAt());
-            return dto;
-        }).collect(Collectors.toList());
-        // return ResponseEntity.ok("All blogs");
+        List<BlogDTO> blogDTOs = blogService.getAllBlogs();
         return ResponseEntity.ok(blogDTOs);
     }
 
+    // Get a blog by its ID
     @GetMapping("/{blogId}")
     public ResponseEntity<?> getBlogById(@PathVariable int blogId, HttpServletRequest request) {
         System.out.println("Blog ID: " + blogId);
-        // return ResponseEntity.ok("Blog ID: " + blogId);
         String jwtStatus = (String) request.getAttribute("jwtStatus");
         if ("invalid".equals(jwtStatus)) {
             System.out.println("Invalid JWT token");
             return ResponseEntity.status(HttpServletResponse.SC_UNAUTHORIZED).body("Invalid JWT token");
         }
 
-        Blog blog = blogService.getBlogById(blogId);
-        if (blog == null) {
-            return ResponseEntity.status(HttpServletResponse.SC_NOT_FOUND).body("Blog not found");
-        }
-
-        BlogDTO dto = new BlogDTO();
-        dto.setBlogId((long) blog.getBlogId());
-        dto.setTitle(blog.getTitle());
-        dto.setContent(blog.getContent());
-        dto.setTags(blog.getTags());
-        dto.setCreatedAt(blog.getCreatedAt());
-        dto.setUpdatedAt(blog.getUpdatedAt());
-
-        return ResponseEntity.ok(dto);
+        BlogDTO blogDTO = blogService.getBlogById(blogId);
+        return ResponseEntity.ok(blogDTO);
     }
 
+    // Get blogs by user ID
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Blog>> getBlogsByUserId(@PathVariable int userId) {
-        List<Blog> blogs = blogService.getBlogsByUserId(userId);
-        return ResponseEntity.ok(blogs);
+    public ResponseEntity<List<BlogDTO>> getBlogsByUserId(@PathVariable int userId) {
+        List<BlogDTO> blogDTOs = blogService.getBlogsByUserId(userId);
+        return ResponseEntity.ok(blogDTOs);
     }
 
+    // Delete a blog by its ID
     @DeleteMapping("/delete/{blogId}")
-    public ResponseEntity<String> deleteBlog(@PathVariable int blogId) {
-        blogService.deleteBlog(blogId);
+    public ResponseEntity<String> deleteBlog(@PathVariable int blogId, HttpServletRequest request) {
+        String authorizationHeader = request.getHeader("Authorization");
+        String username = accountsService.authenticateToken(authorizationHeader);
+        blogService.deleteBlog(blogId, username);
         return ResponseEntity.ok("Blog deleted successfully");
     }
 }
