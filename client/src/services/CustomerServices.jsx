@@ -26,3 +26,6 @@ export const signInService = async (email, password) => {
   });
 }
 
+export const getStoredToken = () => {
+  return sessionStorage.getItem("token");
+};
