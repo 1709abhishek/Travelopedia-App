@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
+import TopBlogs from "./TopBlogs";
 import "../styles/blogpage.css";
 import { getStoredToken } from "../services/CustomerServices";
 import defaultImage from "../assets/default-image.jpg";
@@ -47,6 +48,7 @@ const BlogPage = () => {
     <div className="blog-page">
       <Header />
       <div className="content">
+      <div className="main-content">
         <div className="search-bar">
           <input
             type="text"
@@ -55,14 +57,21 @@ const BlogPage = () => {
             onChange={handleSearch}
           />
           <Link to="/create-blog" className="create-blog-button">
-            Create Blog
+            Write ✒️ 
           </Link>
         </div>
         <div className="blog-list">
           {filteredBlogs.map((blog) => (
+            <Link to={`/blogs/${blog.blogId}`} className="blog-link">
             <div key={blog.id} className="blog-item">
               <div className="blog-text">
-                <h3 className="blog-title">{blog.title}</h3>
+              
+                <h3 className="blog-title">
+                    
+                      {blog.title}
+                    
+                </h3>
+                
                 <p className="blog-description">{blog.content.substring(0, 100)}...</p>
                 
                 <p className="blog-date">
@@ -80,8 +89,11 @@ const BlogPage = () => {
               </div>
               <img src={defaultImage} alt="Blog" className="blog-image" />
             </div>
+            </Link>
           ))}
         </div>
+      </div>
+      <TopBlogs />
       </div>
       <Footer />
     </div>

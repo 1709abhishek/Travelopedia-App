@@ -8,9 +8,14 @@
   
 .content {
     flex: 1;
-    padding: 290px;
+    display: flex;
+    padding: 150px;
     padding-top: 100px;
 }
+
+.main-content {
+    flex: 3;
+  }
   
 .search-bar {
     display: flex;
@@ -47,6 +52,15 @@
     flex-direction: column;
     gap: 20px;
 }
+
+.blog-link {
+    text-decoration: none;
+    color: inherit;
+}
+  
+.blog-link:hover {
+    text-decoration: none;
+}
   
 .blog-item {
     display: flex;
@@ -56,6 +70,12 @@
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.blog-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
   
 .blog-image {

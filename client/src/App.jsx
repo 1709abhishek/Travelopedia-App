@@ -8,12 +8,14 @@ import AccountPage from './components/AccountPage.jsx';
 import BlogPage from './components/BlogPage.jsx';
 import ContactUsPage from './components/ContactUsPage.jsx';
 import ExplorePage from './components/ExplorePage.jsx';
-import HomePage from './components/HomePage.jsx';
+import HomePage from './components/Homepage.jsx';
 import JourneyPage from './components/JourneyPage.jsx';
 import LogTripPage from './components/LogTripPage.jsx';
 import ProtectedRoute from './components/ProtectedRoute.tsx';
 import SignIn from './components/SignIn.jsx';
 import SignUp from './components/SignUp.jsx';
+import CreateBlogPage from "./components/CreateBlogPage.jsx";
+import BlogDetails from './components/BlogDetails.jsx';
 import { AuthProvider } from './contexts/AuthContext';
 
 function App() {
@@ -39,6 +41,8 @@ function App() {
         <Route path="/contact-us" element={<ProtectedRoute><ContactUsPage></ContactUsPage></ProtectedRoute>}></Route>
         <Route path="/log-trip" element={<ProtectedRoute><LogTripPage></LogTripPage></ProtectedRoute>}></Route>
         <Route path="/blogs" element={<ProtectedRoute><BlogPage></BlogPage></ProtectedRoute>}></Route>
+        <Route path="/create-blog" element={<ProtectedRoute><CreateBlogPage /></ProtectedRoute>} />
+        <Route path="/blogs/:blogId" element={<ProtectedRoute><BlogDetails /></ProtectedRoute>} /> 
         {/* Not Found Route */}
         {/* <Route path="*" element={<NotFound />} /> */}
       </Routes>
