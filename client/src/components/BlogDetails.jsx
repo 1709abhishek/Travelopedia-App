@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
 import TopBlogs from "./TopBlogs";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 import "../styles/blogdetails.css";
 import { getStoredToken } from "../services/CustomerServices";
 import defaultImage from "../assets/default-image.jpg";
@@ -84,7 +86,10 @@ const BlogDetails = () => {
             <h1 className="blog-details-title">{blog.title}</h1>
             <p className="blog-details-user">By {blog.userName}</p>
             <p className="blog-details-date">{getTimeDifference(blog.createdAt)}</p>
-            <p className="blog-details-content">{blog.content}</p>
+            {/* <p className="blog-details-content">{blog.content}</p> */}
+            <div className="blog-details-content">
+              <ReactQuill value={blog.content} readOnly={true} theme="bubble" />
+            </div>
             <div className="blog-details-tags">
               {JSON.parse(blog.tags).map((tag, index) => (
                 <span key={index} className="blog-tag">{tag}</span>

@@ -68,3 +68,34 @@
     font-size: 16px;
     color: #ccc;
   }
+
+  .ql-editor h1 {
+    font-size: 2em;
+    /* font-weight: bold; */
+  }
+  
+  .ql-editor h2 {
+    font-size: 1.5em;
+    /* font-weight: bold; */
+  }
+
+  .ql-editor h3 {
+    font-size: 1.17em;
+    /* font-weight:  */
+  }
+
+  .ql-editor p {
+    margin: 0 0 1em;
+  }
+  
+  .ql-editor strong {
+    font-weight: bold;
+  }
+  
+  .ql-editor em {
+    font-style: italic;
+  }
+  
+  .ql-editor u {
+    text-decoration: underline;
+  }

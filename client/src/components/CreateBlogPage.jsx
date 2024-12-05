@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 import "../styles/createblogpage.css";
 import { getStoredToken } from "../services/CustomerServices";
 
@@ -59,6 +61,37 @@ const CreateBlog = () => {
       console.error("Error creating blog:", error);
     }
   };
+  const modules = {
+    toolbar: [
+      // [{ 'font': [] }],
+      // [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+      [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+      ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+      [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+      // [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+      // ['blockquote', 'code-block'],
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
+      [{ 'direction': 'rtl' }],                         // text direction
+      [{ 'align': [] }],
+      ['link'],
+      ['clean']                                         // remove formatting button
+    ]
+  };
+
+  const formats = [
+    // 'font',
+    // 'header',
+    'size',
+    'bold', 'italic', 'underline', 'strike',
+    'color', 'background',
+    // 'script', 'sub', 'super',
+    // 'blockquote', 'code-block',
+    'list', 'bullet',
+    'indent',
+    'direction', 'align',
+    'link'
+  ];
 
   return (
     <div className="create-blog-page">
@@ -79,13 +112,21 @@ const CreateBlog = () => {
           </div>
           <div className="form-group">
             {/* <label htmlFor="content">Content</label> */}
-            <textarea
+            {/* <textarea
               id="content"
               placeholder="Tell about your last trip..."
               value={content}
               onChange={(e) => setContent(e.target.value)}
               required
-            ></textarea>
+            ></textarea> */}
+            <ReactQuill
+              value={content}
+              onChange={setContent}
+              placeholder="Tell about your last trip..."
+              required
+              modules={modules}
+              formats={formats}
+            />
           </div>
           <div className="form-group">
             {/* <label htmlFor="tags">Tags (comma separated)</label> */}
