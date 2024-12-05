@@ -18,9 +18,12 @@ export default function SignIn() {
   const handleSignIn = async (e) => {
     e.preventDefault();
     const response = await signInService(username, password);
-    console.log(response);
-    login(response.data, username)
-    sessionStorage.setItem('token', response.data);
+    console.log("Response:", response);
+    const { jwt, userId, email } = response.data;
+    login(jwt, username);
+    sessionStorage.setItem('token', jwt);
+    sessionStorage.setItem('id', userId);
+    sessionStorage.setItem('email', email);
     navigate('/');
   };
 

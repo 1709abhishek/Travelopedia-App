@@ -16,6 +16,7 @@ import SignIn from './components/SignIn.jsx';
 import SignUp from './components/SignUp.jsx';
 import CreateBlogPage from "./components/CreateBlogPage.jsx";
 import BlogDetails from './components/BlogDetails.jsx';
+import UpdateBlogPage from './components/UpdateBlogPage.jsx';
 import { AuthProvider } from './contexts/AuthContext';
 
 function App() {
@@ -43,6 +44,7 @@ function App() {
         <Route path="/blogs" element={<ProtectedRoute><BlogPage></BlogPage></ProtectedRoute>}></Route>
         <Route path="/create-blog" element={<ProtectedRoute><CreateBlogPage /></ProtectedRoute>} />
         <Route path="/blogs/:blogId" element={<ProtectedRoute><BlogDetails /></ProtectedRoute>} /> 
+        <Route path="/blogs/update/:blogId" element={<ProtectedRoute><UpdateBlogPage /></ProtectedRoute>} />
         {/* Not Found Route */}
         {/* <Route path="*" element={<NotFound />} /> */}
       </Routes>

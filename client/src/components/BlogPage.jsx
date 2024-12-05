@@ -4,12 +4,13 @@ import Header from "./Header";
 import Footer from "./Footer";
 import TopBlogs from "./TopBlogs";
 import "../styles/blogpage.css";
-import { getStoredToken } from "../services/CustomerServices";
+import { getStoredToken, getStoredUserId } from "../services/CustomerServices";
 import defaultImage from "../assets/default-image.jpg";
 
 const BlogPage = () => {
   const [blogs, setBlogs] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [showMyBlogs, setShowMyBlogs] = useState(false);
 
   useEffect(() => {
     // Fetch blogs
@@ -32,8 +33,56 @@ const BlogPage = () => {
     fetchBlogs();
   }, []);
 
+  useEffect(() => {
+    if (showMyBlogs) {
+      // Fetch user's blogs
+      const fetchMyBlogs = async () => {
+        try {
+          const token = getStoredToken();
+          const id = getStoredUserId();
+          // console.log("id", id);
+          const response = await fetch(`http://localhost:8080/blogs/user/${id}`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}`
+            }
+          });
+          const data = await response.json();
+          setBlogs(data);
+        } catch (error) {
+          console.error("Error fetching user's blogs:", error);
+        }
+      };
+      fetchMyBlogs();
+    } else {
+      // Fetch all blogs
+      const fetchBlogs = async () => {
+        try {
+          const token = getStoredToken();
+          const response = await fetch("http://localhost:8080/blogs/all", {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}`
+            }
+          });
+          const data = await response.json();
+          setBlogs(data);
+        } catch (error) {
+          console.error("Error fetching blogs:", error);
+        }
+      };
+      fetchBlogs();
+    }
+  }, [showMyBlogs]);
+
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
+  };
+
+  const handleCheckboxChange = (e) => {
+    setShowMyBlogs(e.target.checked);
   };
 
   const filteredBlogs = blogs.filter((blog) => {
@@ -43,6 +92,14 @@ const BlogPage = () => {
       tags.includes(searchTerm.toLowerCase())
     );
   });
+
+  const getImageSrc = (image) => {
+    if (image) {
+      console.log("image", image);
+      return `data:image/jpeg;base64,${image}`;
+    }
+    return defaultImage;
+  };
 
   return (
     <div className="blog-page">
@@ -56,40 +113,41 @@ const BlogPage = () => {
             value={searchTerm}
             onChange={handleSearch}
           />
+          <label className="checkbox-label">
+              <input
+                type="checkbox"
+                checked={showMyBlogs}
+                onChange={handleCheckboxChange}
+              />
+              Show My Blogs
+            </label>
           <Link to="/create-blog" className="create-blog-button">
             Write ✒️ 
           </Link>
         </div>
         <div className="blog-list">
           {filteredBlogs.map((blog) => (
-            <Link to={`/blogs/${blog.blogId}`} className="blog-link">
-            <div key={blog.id} className="blog-item">
-              <div className="blog-text">
-              
-                <h3 className="blog-title">
-                    
-                      {blog.title}
-                    
-                </h3>
-                
-                <p className="blog-description">{blog.content.substring(0, 100)}...</p>
-                
-                <p className="blog-date">
-                  {new Date(blog.createdAt).toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric"
-                  })}
-                </p>
-                <div className="blog-tags">
-                  {JSON.parse(blog.tags).map((tag, index) => (
-                    <span key={index} className="blog-tag">{tag}</span>
-                  ))}
+            <Link to={`/blogs/${blog.blogId}`} className="blog-link" key={blog.id}>
+                <div className="blog-item">
+                  <div className="blog-text">
+                    <h3 className="blog-title">{blog.title}</h3>
+                    <p className="blog-description">{blog.content.substring(0, 100)}...</p>
+                    <p className="blog-date">
+                      {new Date(blog.createdAt).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric"
+                      })}
+                    </p>
+                    <div className="blog-tags">
+                      {JSON.parse(blog.tags).map((tag, index) => (
+                        <span key={index} className="blog-tag">{tag}</span>
+                      ))}
+                    </div>
+                  </div>
+                  <img src={getImageSrc(blog.image)} alt="Blog" className="blog-image" />
                 </div>
-              </div>
-              <img src={defaultImage} alt="Blog" className="blog-image" />
-            </div>
-            </Link>
+              </Link>
           ))}
         </div>
       </div>

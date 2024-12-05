@@ -62,15 +62,27 @@ const BlogDetails = () => {
     return <div>Loading...</div>;
   }
 
+  const getImageSrc = (image) => {
+    if (image) {
+      console.log("image", image);
+      return `data:image/jpeg;base64,${image}`;
+    }
+    return defaultImage;
+  };
+
+  if (!blog) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="blog-details-page">
       <Header />
       <div className="content">
         <div className="main-content">
           <div className="blog-details">
-            <img src={blog.image || defaultImage} alt={blog.title} className="blog-details-image" />
+          <img src={getImageSrc(blog.image)} alt={blog.title} className="blog-details-image" />
             <h1 className="blog-details-title">{blog.title}</h1>
-            <p className="blog-details-user">By {blog.user}</p>
+            <p className="blog-details-user">By {blog.userName}</p>
             <p className="blog-details-date">{getTimeDifference(blog.createdAt)}</p>
             <p className="blog-details-content">{blog.content}</p>
             <div className="blog-details-tags">

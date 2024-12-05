@@ -1,22 +1,46 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
-import "../styles/createblogpage.css";
+import "../styles/updateblogpage.css";
 import { getStoredToken } from "../services/CustomerServices";
 
-const CreateBlog = () => {
+const UpdateBlogPage = () => {
+  const { blogId } = useParams();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [tags, setTags] = useState([]);
-  const [tagInput, setTagInput] = useState("");
   const [image, setImage] = useState(null);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    // Fetch blog details
+    const fetchBlogDetails = async () => {
+      try {
+        const token = getStoredToken();
+        const response = await fetch(`http://localhost:8080/blogs/${blogId}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          }
+        });
+        const data = await response.json();
+        setTitle(data.title);
+        setContent(data.content);
+        setTags(JSON.parse(data.tags));
+        setImage(data.image);
+      } catch (error) {
+        console.error("Error fetching blog details:", error);
+      }
+    };
+    fetchBlogDetails();
+  }, [blogId]);
+
   const handleTagInput = (e) => {
-    if (e.key === "Enter" && tagInput.trim()) {
-      setTags([...tags, tagInput.trim()]);
-      setTagInput("");
+    if (e.key === "Enter" && e.target.value.trim()) {
+      setTags([...tags, e.target.value.trim()]);
+      e.target.value = "";
       e.preventDefault();
     }
   };
@@ -41,8 +65,8 @@ const CreateBlog = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:8080/blogs/create", {
-        method: "POST",
+      const response = await fetch(`http://localhost:8080/blogs/update/${blogId}`, {
+        method: "PUT",
         headers: {
           "Authorization": `Bearer ${token}`
         },
@@ -50,24 +74,22 @@ const CreateBlog = () => {
       });
 
       if (response.ok) {
-        const newBlog = await response.json();
-        navigate(`/blogs/${newBlog.blogId}`);
+        navigate(`/blogs/${blogId}`);
       } else {
-        console.error("Failed to create blog");
+        console.error("Failed to update blog");
       }
     } catch (error) {
-      console.error("Error creating blog:", error);
+      console.error("Error updating blog:", error);
     }
   };
 
   return (
-    <div className="create-blog-page">
+    <div className="update-blog-page">
       <Header />
       <div className="content">
-        {/* <h2>Share your experience</h2> */}
-        <form onSubmit={handleSubmit} className="create-blog-form">
+        <h2>Update your blog</h2>
+        <form onSubmit={handleSubmit} className="update-blog-form">
           <div className="form-group">
-            {/* <label htmlFor="title">Title</label> */}
             <input
               type="text"
               id="title"
@@ -78,7 +100,6 @@ const CreateBlog = () => {
             />
           </div>
           <div className="form-group">
-            {/* <label htmlFor="content">Content</label> */}
             <textarea
               id="content"
               placeholder="Tell about your last trip..."
@@ -88,13 +109,10 @@ const CreateBlog = () => {
             ></textarea>
           </div>
           <div className="form-group">
-            {/* <label htmlFor="tags">Tags (comma separated)</label> */}
             <input
               type="text"
               id="tags"
               placeholder="Enter a tag and press Enter"
-              value={tagInput}
-              onChange={(e) => setTagInput(e.target.value)}
               onKeyDown={handleTagInput}
             />
             <div className="tags-container">
@@ -119,7 +137,7 @@ const CreateBlog = () => {
               style={{ display: "none" }}
             />
           </div>
-          <button type="submit" className="create-blog-button">Share your experience</button>
+          <button type="submit" className="update-blog-button">Update Blog</button>
         </form>
       </div>
       <Footer />
@@ -127,4 +145,4 @@ const CreateBlog = () => {
   );
 };
 
-export default CreateBlog;
+export default UpdateBlogPage;

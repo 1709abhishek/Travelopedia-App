@@ -25,8 +25,8 @@
   }
   
   .blog-details-image {
-    width: 100%;
-    height: auto;
+    width: 2048px;
+    height: 700px;
     border-radius: 8px;
     margin-bottom: 20px;
   }

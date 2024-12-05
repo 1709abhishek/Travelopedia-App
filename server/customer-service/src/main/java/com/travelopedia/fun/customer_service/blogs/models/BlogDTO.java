@@ -11,4 +11,6 @@ public class BlogDTO {
     private String tags;
     private Date createdAt;
     private Date updatedAt;
+    private String userName;
+    private byte[] image;
 }

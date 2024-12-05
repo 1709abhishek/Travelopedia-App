@@ -44,7 +44,7 @@ const TopBlogs = () => {
           <div key={blog.id} className="top-blog-item">
             <img src={blog.image} alt={blog.title} className="top-blog-image" />
             <div className="top-blog-text">
-              <Link to={`/blog/${blog.id}`} className="top-blog-link">
+              <Link to={`/blogs/${blog.id}`} className="top-blog-link">
                 <h3>{blog.title}</h3>
               </Link>
             </div>
