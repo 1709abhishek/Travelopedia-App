@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 import "../styles/updateblogpage.css";
 import { getStoredToken } from "../services/CustomerServices";
 
@@ -10,6 +12,7 @@ const UpdateBlogPage = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [tags, setTags] = useState([]);
+  const [tagInput, setTagInput] = useState("");
   const [image, setImage] = useState(null);
   const navigate = useNavigate();
 
@@ -38,9 +41,9 @@ const UpdateBlogPage = () => {
   }, [blogId]);
 
   const handleTagInput = (e) => {
-    if (e.key === "Enter" && e.target.value.trim()) {
-      setTags([...tags, e.target.value.trim()]);
-      e.target.value = "";
+    if (e.key === "Enter" && tagInput.trim()) {
+      setTags([...tags, tagInput.trim()]);
+      setTagInput("");
       e.preventDefault();
     }
   };
@@ -83,11 +86,35 @@ const UpdateBlogPage = () => {
     }
   };
 
+  const modules = {
+    toolbar: [
+      [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+      ['bold', 'underline', 'strike'],        // toggled buttons
+      [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
+      [{ 'direction': 'rtl' }],                         // text direction
+      [{ 'align': [] }],
+      ['link'],
+      ['clean']                                         // remove formatting button
+    ]
+  };
+
+  const formats = [
+    'size',
+    'bold', 'underline', 'strike',
+    'color', 'background',
+    'list', 'bullet',
+    'indent',
+    'direction', 'align',
+    'link'
+  ];
+
   return (
     <div className="update-blog-page">
       <Header />
-      <div className="content">
-        <h2>Update your blog</h2>
+      <div className="update-content">
+        {/* <h2>Update your blog</h2> */}
         <form onSubmit={handleSubmit} className="update-blog-form">
           <div className="form-group">
             <input
@@ -100,19 +127,22 @@ const UpdateBlogPage = () => {
             />
           </div>
           <div className="form-group">
-            <textarea
-              id="content"
-              placeholder="Tell about your last trip..."
+            <ReactQuill
               value={content}
-              onChange={(e) => setContent(e.target.value)}
+              onChange={setContent}
+              placeholder="Tell about your last trip..."
               required
-            ></textarea>
+              modules={modules}
+              formats={formats}
+            />
           </div>
           <div className="form-group">
             <input
               type="text"
               id="tags"
               placeholder="Enter a tag and press Enter"
+              value={tagInput}
+              onChange={(e) => setTagInput(e.target.value)}
               onKeyDown={handleTagInput}
             />
             <div className="tags-container">
@@ -128,7 +158,8 @@ const UpdateBlogPage = () => {
           </div>
           <div className="form-group">
             <label htmlFor="image" className="image-label">
-              {image ? image.name : "Share an image"}
+              {image ? image.name : " Share an image"}
+              {"Share an image"}
             </label>
             <input
               type="file"
@@ -137,7 +168,10 @@ const UpdateBlogPage = () => {
               style={{ display: "none" }}
             />
           </div>
-          <button type="submit" className="update-blog-button">Update Blog</button>
+          <div className="button-group">
+            <button type="button" className="update-cancel-button" onClick={() => navigate(`/blogs/${blogId}`)}>Cancel</button>
+            <button type="submit" className="update-blog-button">Update Blog</button>
+          </div>
         </form>
       </div>
       <Footer />

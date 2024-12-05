@@ -66,7 +66,7 @@ const CreateBlog = () => {
       // [{ 'font': [] }],
       // [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
       [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
-      ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+      ['bold', 'underline', 'strike'],        // toggled buttons
       [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
       // [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
       // ['blockquote', 'code-block'],
@@ -83,7 +83,7 @@ const CreateBlog = () => {
     // 'font',
     // 'header',
     'size',
-    'bold', 'italic', 'underline', 'strike',
+    'bold', 'underline', 'strike',
     'color', 'background',
     // 'script', 'sub', 'super',
     // 'blockquote', 'code-block',

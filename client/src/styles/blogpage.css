@@ -26,12 +26,23 @@
 }
   
 .search-bar input {
-    width: 70%;
+    width: 60%;
     padding: 10px;
     font-size: 16px;
     border: 1px solid #333;
     border-radius: 4px;
 }
+
+.search-bar select {
+    width: 20%; 
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #333;
+    border-radius: 4px;
+    background-color: #333;
+    color: #fff;
+    margin-left: 10px;
+  }
   
 .create-blog-button {
     padding: 10px 20px;
@@ -71,6 +82,8 @@
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s, box-shadow 0.2s;
+    width: 100%; /* Full width container */
+    box-sizing: border-box;
 }
 
 .blog-item:hover {
@@ -87,6 +100,7 @@
   
 .blog-text {
     flex: 1;
+    text-align: left; 
 }
   
 .blog-title {
@@ -116,7 +130,21 @@
 }
 
 .blog-date {
+    font-size: 12px;
+    color: #366fad;
+    margin-left: auto;
+    white-space: nowrap;
+}
+
+.blog-meta {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
     margin-top: 10px;
+}
+  
+.blog-author {
     font-size: 14px;
     color: #cabd76;
+    flex-grow: 1;
 }

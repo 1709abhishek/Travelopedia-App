@@ -17,15 +17,15 @@ const JourneyPage = () => {
   const navigate = useNavigate();
   const [userData] = useState({
     name: accountState.firstName + " " + accountState.lastName,
+    firstName: accountState.firstName,
+    lastName: accountState.lastName,
     username: accountState.username,
-    location: accountState.city + ", " + accountState.country,
+    location: accountState.city === '' || accountState.city == null ? 'Not available' : accountState.city + ", " + accountState.country,
     travelPercentile: 95,
     milesTraveled: 50000,
-    countriesVisited: accountState.placeTravelled.length,
-    tripsPlanned: accountState.wishlist.length,
+    countriesVisited: accountState.placeTravelled ? accountState.placeTravelled.length : 0,
+    tripsPlanned: accountState.wishlist ? accountState.wishlist.length : 0,
   });
-
-  const recentPlaces = accountState.placeTravelled.length<3?accountState.placeTravelled:accountState.placeTravelled.slice(0,3);
 
 
   return (
@@ -47,7 +47,7 @@ const JourneyPage = () => {
             <AvatarFallback className="bg-zinc-800 text-xl">{userData.name.charAt(0)}</AvatarFallback>
           </Avatar>
           <h2 className="text-xl font-bold">{userData.name}</h2>
-          <p className="text-sm text-zinc-400 mb-6">@{userData.username}</p>
+          <p className="text-sm text-zinc-400 mb-6">@{userData.firstName}{userData.lastName}</p>
           
           <div className="w-full space-y-4 mb-6">
             <div className="flex items-center gap-2 text-sm">
@@ -146,11 +146,15 @@ const JourneyPage = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {recentPlaces.map((trip, index) => (
+                {[
+                  { place: "Tokyo, Japan", date: "October 2023" },
+                  { place: "Paris, France", date: "August 2023" },
+                  { place: "New York, USA", date: "June 2023" },
+                ].map((trip, index) => (
                   <div key={index} className="flex items-center justify-between hover:bg-zinc-800 p-2 rounded-lg cursor-pointer">
                     <div>
-                      <div className="font-semibold">{trip}</div>
-                      
+                      <div className="font-semibold">{trip.place}</div>
+                      <div className="text-sm text-zinc-400">{trip.date}</div>
                     </div>
                     <ChevronRight className="h-4 w-4" />
                   </div>

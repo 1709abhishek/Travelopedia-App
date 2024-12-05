@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
 import TopBlogs from "./TopBlogs";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "../styles/blogdetails.css";
-import { getStoredToken } from "../services/CustomerServices";
+import { getStoredToken, getStoredEmail } from "../services/CustomerServices";
 import defaultImage from "../assets/default-image.jpg";
+import ConfirmDialog from "./ConfirmDialog";
 
 const BlogDetails = () => {
   const { blogId } = useParams();
   const [blog, setBlog] = useState(null);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const navigate = useNavigate();
+  const userEmail = getStoredEmail();
 
   useEffect(() => {
     // Fetch blog details
@@ -76,6 +80,43 @@ const BlogDetails = () => {
     return <div>Loading...</div>;
   }
 
+  const handleEditClick = () => {
+    navigate(`/blogs/edit/${blogId}`);
+  };
+
+  const getUsername = (email) => {
+    return email.split('@')[0];
+  };
+
+  const handleDeleteClick = () => {
+    setShowConfirmDialog(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    setShowConfirmDialog(false);
+    const token = getStoredToken();
+    try {
+      const response = await fetch(`http://localhost:8080/blogs/delete/${blogId}`, {
+        method: "DELETE",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        navigate("/blogs");
+      } else {
+        console.error("Failed to delete blog");
+      }
+    } catch (error) {
+      console.error("Error deleting blog:", error);
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setShowConfirmDialog(false);
+  };
+
   return (
     <div className="blog-details-page">
       <Header />
@@ -84,7 +125,19 @@ const BlogDetails = () => {
           <div className="blog-details">
           <img src={getImageSrc(blog.image)} alt={blog.title} className="blog-details-image" />
             <h1 className="blog-details-title">{blog.title}</h1>
+            <div className="blog-meta">
             <p className="blog-details-user">By {blog.userName}</p>
+            {blog.userName === getUsername(userEmail) && (
+              <div className="blog-actions">
+                  <button className="edit-button" onClick={handleEditClick}>
+                    Edit
+                  </button>
+                  <button className="delete-button" onClick={handleDeleteClick}>
+                    Delete
+                  </button>
+                </div>
+            )}
+            </div>
             <p className="blog-details-date">{getTimeDifference(blog.createdAt)}</p>
             {/* <p className="blog-details-content">{blog.content}</p> */}
             <div className="blog-details-content">
@@ -95,11 +148,22 @@ const BlogDetails = () => {
                 <span key={index} className="blog-tag">{tag}</span>
               ))}
             </div>
+            {/* {blog.userName === getUsername(userEmail) && (
+              <button className="edit-button" onClick={handleEditClick}>
+                Edit
+              </button>
+            )} */}
           </div>
         </div>
         <TopBlogs />
       </div>
       <Footer />
+      <ConfirmDialog
+        show={showConfirmDialog}
+        message={`Are you sure you want to delete the blog "${blog.title}"?`}
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+      />
     </div>
   );
 };
