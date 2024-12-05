@@ -2,3 +2,11 @@
     font-size: 40px;
     font-family: "Dancing Script", cursive !important;
 }
+
+nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: #333;
+}

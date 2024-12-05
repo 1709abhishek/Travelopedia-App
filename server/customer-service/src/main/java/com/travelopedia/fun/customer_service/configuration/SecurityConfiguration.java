@@ -145,7 +145,7 @@ public class SecurityConfiguration {
         // return http.build();
         http.csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/sayHello", "/customer","/accounts/*", "/profile/*", "/travel-stats/*").permitAll()
+                .requestMatchers("/sayHello", "/customer","/accounts/*", "/profile/*", "/travel-stats/*", "/blogs/**").permitAll()
                 .anyRequest().authenticated()
             )
             // .sessionManagement(session -> session

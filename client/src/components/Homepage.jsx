@@ -132,7 +132,7 @@ const Homepage = () => {
             </div>
           </a>
 
-          <a href="./locations.html#bali" target="_blank">
+          <a href="./src/static/indonesia.html" target="_blank">
             <div className="col-content">
               <img src={l4} alt="" />
               <h5>Indonesia</h5>
@@ -148,7 +148,7 @@ const Homepage = () => {
             </div>
           </a>
 
-          <a href="./locations.html#geneva" target="_blank">
+          <a href="./src/static/switzerland.html" target="_blank">
             <div className="col-content">
               <img src={l6} alt="" />
               <h5>Switzerland</h5>
@@ -156,7 +156,7 @@ const Homepage = () => {
             </div>
           </a>
 
-          <a href="./locations.html#port-blair" target="_blank">
+          <a href="./src/static/aan.html" target="_blank">
             <div className="col-content">
               <img src={l7} alt="" />
               <h5>Andaman & Nicobar</h5>
@@ -164,7 +164,7 @@ const Homepage = () => {
             </div>
           </a>
 
-          <a href="./locations.html#rome" target="_blank">
+          <a href="./src/static/Italy.html" target="_blank">
             <div className="col-content">
               <img src={l8} alt="" />
               <h5>Italy</h5>
@@ -180,7 +180,7 @@ const Homepage = () => {
             </div>
           </a>
 
-          <a href="./locations.html#rome" target="_blank">
+          <a href="./src/static/new_york.html" target="_blank">
             <div className="col-content">
               <img src={l9} alt="" />
               <h5>New York</h5>
