@@ -25,8 +25,6 @@ const JourneyPage = () => {
     tripsPlanned: accountState.wishlist.length,
   });
 
-  const recentPlaces = accountState.placeTravelled.length<3?accountState.placeTravelled:accountState.placeTravelled.slice(0,3);
-
 
   return (
     <div className="homepage">
@@ -146,11 +144,15 @@ const JourneyPage = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {recentPlaces.map((trip, index) => (
+                {[
+                  { place: "Tokyo, Japan", date: "October 2023" },
+                  { place: "Paris, France", date: "August 2023" },
+                  { place: "New York, USA", date: "June 2023" },
+                ].map((trip, index) => (
                   <div key={index} className="flex items-center justify-between hover:bg-zinc-800 p-2 rounded-lg cursor-pointer">
                     <div>
-                      <div className="font-semibold">{trip}</div>
-                      
+                      <div className="font-semibold">{trip.place}</div>
+                      <div className="text-sm text-zinc-400">{trip.date}</div>
                     </div>
                     <ChevronRight className="h-4 w-4" />
                   </div>
