@@ -2,6 +2,8 @@ package com.travelopedia.fun.itinerary_service.itinerary;
 
 import java.util.List;
 
+import com.travelopedia.fun.itinerary_service.clients.CustomerServiceProxy;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +19,15 @@ import com.travelopedia.fun.itinerary_service.itinerary.dto.ItineraryResponse;
 public class ItineraryController {
 
     private final ItineraryService itineraryService;
+
+    @Autowired
+    private CustomerServiceProxy customerServiceProxy;
+
+
+    @GetMapping("/feign")
+    public String testFeignClient(@RequestHeader("Authorization") String authorization) {
+        return customerServiceProxy.getExampleEndpoint(authorization);
+    }
 
     // Constructor injection for ItineraryService
     public ItineraryController(ItineraryService itineraryService) {

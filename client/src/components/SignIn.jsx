@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import travelPic from "../assets/travel_vertical.jpg";
 import { useAuth } from "../contexts/AuthContext";
 import { signInService } from "../services/CustomerServices";
+import { useAccount } from "../contexts/AccountContext";
 import "../styles/loginpage.css";
 
 export default function SignIn() {
@@ -12,19 +13,30 @@ export default function SignIn() {
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
+  const [error, setError] = useState("");
+  const { fetchProfileDetails } = useAccount();
   const {login} = useAuth();
 
   const handleSignIn = async (e) => {
     e.preventDefault();
-    const response = await signInService(username, password);
-    console.log("Response:", response);
-    const { jwt, userId, email } = response.data;
-    login(jwt, username);
-    sessionStorage.setItem('token', jwt);
-    sessionStorage.setItem('id', userId);
-    sessionStorage.setItem('email', email);
-    navigate('/');
+    try {
+      const response = await signInService(username, password);
+      const { jwt, userId, email } = response.data;
+      sessionStorage.setItem('token', jwt);
+      sessionStorage.setItem('id', userId);
+      sessionStorage.setItem('email', email);
+      login(jwt, username);
+      fetchProfileDetails();
+      navigate('/');
+    } catch (error) {
+      if (error.response) {
+        setError("Login failed: Bad credentials");
+      } else if (error.request) {
+        setError("Login failed: Unable to connect to the server");
+      } else {
+        setError("Login failed: An unexpected error occurred");
+      }
+    }
   };
 
   return (
@@ -58,6 +70,7 @@ export default function SignIn() {
               />
             </div>
             <input type="submit" value="Login" className="btn" />
+            <div className="error-message">{error && <p>{error}</p>} </div>
             <p>
               Don't have an account?{" "}
               <a href="/signup" className="account-text" id="sign-up-link">
