@@ -17,6 +17,7 @@ const BlogPage = () => {
     const fetchBlogs = async () => {
       try {
         const token = getStoredToken();
+        console.log("token", JSON.stringify(token));
         const response = await fetch("http://localhost:8080/blogs/all", {
           method: "GET",
           headers: {

@@ -1,15 +1,27 @@
 package com.travelopedia.fun.budget_service.beans;
 
-import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
+
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "trips")
 public class Trip {
 
     @Id
-    String email;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String email;
 
     private String destination;
     private String country;
@@ -23,6 +35,21 @@ public class Trip {
 
     // Getters and setters
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public String getDestination() {
         return destination;
@@ -72,19 +99,13 @@ public class Trip {
         this.itinerary = itinerary;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 }
 
 @Embeddable
 class ItineraryItem {
     private String time;
     private String activity;
+    private String day;
 
     // Getters and setters
 
@@ -102,5 +123,13 @@ class ItineraryItem {
 
     public void setActivity(String activity) {
         this.activity = activity;
+    }
+
+    public String getDay() {
+        return day;
+    }
+
+    public void setDay(String day) {
+        this.day = day;
     }
 }

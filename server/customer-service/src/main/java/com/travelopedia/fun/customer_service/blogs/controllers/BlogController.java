@@ -47,6 +47,7 @@ public class BlogController {
             HttpServletRequest request) throws IOException {
         String authorizationHeader = request.getHeader("Authorization");
         String username = accountsService.authenticateToken(authorizationHeader);
+        
         // System.out.println("Username: " + username);
         Blog blog = new Blog();
         blog.setTitle(title);

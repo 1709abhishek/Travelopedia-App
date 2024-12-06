@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { createContext } from 'react';
+import React, { createContext, useContext } from 'react';
 import { getUserDetailsService } from '../services/CustomerServices';
 
 const AccountContext = createContext();
@@ -20,8 +20,8 @@ function reducer(state, action) {
       return { ...state, country: action.payload };
     case 'setBio':
       return { ...state, bio: action.payload };
-    case 'setPlaceTravelled':
-      return { ...state, placeTravelled: action.payload };
+    case 'setPlacesTravelled':
+      return { ...state, placesTravelled: action.payload };
     case 'setWishlist':
       return { ...state, wishlist: action.payload };
     case 'setTravelQuote':
@@ -33,22 +33,7 @@ function reducer(state, action) {
   }
 }
 
-
-const AccountContextProvider = props => {
-  // const [accountState, dispatch] = React.useReducer(reducer, {
-  //   firstName: 'Abhishek',
-  //   lastName: 'Jain',
-  //   phoneNumber: '1234567890',
-  //   email: '1709abhishek@gmail.com',
-  //   city: 'Bengaluru',
-  //   country: 'India',
-  //   bio: 'I am a software developer',
-  //   placeTravelled: ['India', 'USA', 'France', 'Netherlands', 'Brussels', 'Azerbaijan'],
-  //   wishlist: ['Rome', 'Italy', 'Spain', 'New Zealand', 'Australia'],
-  //   travelQuote: 'Travel is the only thing you buy that makes you richer',
-  //   username: 'Wanderlust'
-  // });
-  
+const AccountContextProvider = (props) => {
   const [accountState, dispatch] = React.useReducer(reducer, {
     firstName: '',
     lastName: '',
@@ -57,23 +42,22 @@ const AccountContextProvider = props => {
     city: '',
     country: '',
     bio: '',
-    placeTravelled: [],
+    placesTravelled: [],
     wishlist: [],
     travelQuote: '',
-    username: ''
   });
 
-  const setFirstName = firstName => dispatch({ type: 'setFirstName', payload: firstName });
-  const setLastName = lastName => dispatch({ type: 'setLastName', payload: lastName });
-  const setPhoneNumber = phoneNumber => dispatch({ type: 'setPhoneNumber', payload: phoneNumber });
-  const setEmail = email => dispatch({ type: 'setEmail', payload: email });
-  const setCity = city => dispatch({ type: 'setCity', payload: city });
-  const setCountry = country => dispatch({ type: 'setCountry', payload: country });
-  const setBio = bio => dispatch({ type: 'setBio', payload: bio });
-  const setPlaceTravelled = placeTravelled => dispatch({ type: 'setPlaceTravelled', payload: placeTravelled });
-  const setWishlist = wishlist => dispatch({ type: 'setWishlist', payload: wishlist });
-  const setTravelQuote = travelQuote => dispatch({ type: 'setTravelQuote', payload: travelQuote });
-  const setUsername = username => dispatch({ type: 'username', payload: username });
+  const setFirstName = (firstName) => dispatch({ type: 'setFirstName', payload: firstName });
+  const setLastName = (lastName) => dispatch({ type: 'setLastName', payload: lastName });
+  const setPhoneNumber = (phoneNumber) => dispatch({ type: 'setPhoneNumber', payload: phoneNumber });
+  const setEmail = (email) => dispatch({ type: 'setEmail', payload: email });
+  const setCity = (city) => dispatch({ type: 'setCity', payload: city });
+  const setCountry = (country) => dispatch({ type: 'setCountry', payload: country });
+  const setBio = (bio) => dispatch({ type: 'setBio', payload: bio });
+  const setPlacesTravelled = (placesTravelled) =>
+    dispatch({ type: 'setPlacesTravelled', payload: placesTravelled });
+  const setWishlist = (wishlist) => dispatch({ type: 'setWishlist', payload: wishlist });
+  const setTravelQuote = (travelQuote) => dispatch({ type: 'setTravelQuote', payload: travelQuote });
 
   React.useEffect(() => {
     const fetchProfileDetails = async () => {
@@ -142,10 +126,10 @@ const AccountContextProvider = props => {
         setCity,
         setCountry,
         setBio,
-        setPlaceTravelled,
+        setPlacesTravelled,
         setWishlist,
         setTravelQuote,
-        setUsername
+        fetchProfileDetails,
       }}
     >
       {props.children}
@@ -154,6 +138,16 @@ const AccountContextProvider = props => {
 };
 
 AccountContextProvider.propTypes = {
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
 };
+
+// Custom hook to use the AccountContext
+export const useAccount = () => {
+  const context = useContext(AccountContext);
+  if (!context) {
+    throw new Error('useAccount must be used within an AccountContextProvider');
+  }
+  return context;
+};
+
 export { AccountContext, AccountContextProvider };
