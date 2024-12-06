@@ -3,15 +3,7 @@ package com.travelopedia.fun.budget_service.beans;
 import java.time.LocalDate;
 import java.util.List;
 
-import jakarta.persistence.CollectionTable;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "trips")
@@ -104,6 +96,7 @@ public class Trip {
 @Embeddable
 class ItineraryItem {
     private String time;
+    @Column(length = 5000)
     private String activity;
     private String day;
 

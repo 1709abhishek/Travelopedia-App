@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Calendar, Clock, MapPin, PlusCircle } from 'lucide-react'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { AddTripModal } from "../components/add-trip-modal.tsx"
 import { BudgetModal } from "../components/BudgetModel.jsx"
 import Header from "../components/Header.jsx"
