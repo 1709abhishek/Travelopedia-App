@@ -59,28 +59,61 @@ const AccountContextProvider = (props) => {
   const setWishlist = (wishlist) => dispatch({ type: 'setWishlist', payload: wishlist });
   const setTravelQuote = (travelQuote) => dispatch({ type: 'setTravelQuote', payload: travelQuote });
 
-  const fetchProfileDetails = async () => {
-    try {
-      console.log('Fetching profile details...');
-      const email = localStorage.getItem('user');
-      const jwt = localStorage.getItem('token');
-      const response = await getUserDetailsService(jwt, email);
-      const profile = response.data;
-      setFirstName(profile.firstName);
-      setLastName(profile.lastName);
-      setPhoneNumber(profile.phoneNumber);
-      setEmail(profile.email);
-      setCity(profile.city);
-      setCountry(profile.country);
-      setBio(profile.bio);
-      setPlacesTravelled(profile.placesTravelled || []);
-      setWishlist(profile.wishlist || []);
-
-      setTravelQuote(profile.travelQuote);
-    } catch (error) {
-      console.error('Failed to fetch profile details:', error.response ? error.response.data : error.message);
-    }
-  };
+  React.useEffect(() => {
+    const fetchProfileDetails = async () => {
+      try {
+        console.log('Fetching profile details...');
+        const email = localStorage.getItem('user');
+        console.log('Email:', email);
+        const jwt = localStorage.getItem('token');
+        const response = await getUserDetailsService(email, jwt);
+        const profile = response.data;
+        console.log('Profile:', profile);
+        setFirstName(profile.firstName);
+        setLastName(profile.lastName);
+        setPhoneNumber(profile.phoneNumber);
+        setEmail(profile.email);
+        setCity(profile.city);
+        setCountry(profile.country);
+        setBio(profile.bio);
+        setPlaceTravelled(profile.placeTravelled);
+        setWishlist(profile.wishlist);
+        setTravelQuote(profile.travelQuote);
+        setUsername(profile.username);
+      } catch (error) {
+        console.error('Failed to fetch profile details:', error.response ? error.response.data : error.message);
+      }
+    };
+  
+    fetchProfileDetails();
+  }, []);React.useEffect(() => {
+    const fetchProfileDetails = async () => {
+      try {
+        console.log('Fetching profile details...');
+        const email = localStorage.getItem('user');
+        console.log('Email:', email);
+        const jwt = localStorage.getItem('token');
+        const response = await getUserDetailsService(email, jwt);
+        const profile = response.data;
+        console.log('Profile:', profile);
+        setFirstName(profile.firstName);
+        setLastName(profile.lastName);
+        setPhoneNumber(profile.phoneNumber);
+        setEmail(profile.email);
+        setCity(profile.city);
+        setCountry(profile.country);
+        setBio(profile.bio);
+        setPlaceTravelled(profile.placeTravelled);
+        setWishlist(profile.wishlist);
+        setTravelQuote(profile.travelQuote);
+        setUsername(profile.username);
+      } catch (error) {
+        console.error('Failed to fetch profile details:', error.response ? error.response.data : error.message);
+      }
+    };
+  
+    fetchProfileDetails();
+  }, []);
 
   return (
     <AccountContext.Provider
