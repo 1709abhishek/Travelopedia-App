@@ -10,6 +10,7 @@
 const serviceConfig = {
   host: import.meta.env.VITE_API_APP_HOST,
   budgetHost: "http://localhost:8300",
+  itineraryHost: "http://localhost:8000"
 };
 
 export default serviceConfig;
