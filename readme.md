@@ -2,7 +2,7 @@
 
 A comprehensive web application for backpackers and travelers to plan, document, optimize and look for their travel-stats!
 
-[Visit Live Site](https://travelopedia-v1.vercel.app/)
+[Visit Live Site](https://travelopedia-frontend.vercel.app/)
 
 ![Travelopedia Landing Page](https://sjc.microlink.io/Go_faWJMEfoNs4GKzuirNS_gZFJoOMQJ1gvwUp6bJp1-5ImzT8RpZ7hFVf5O4hrH26tPi6gnFGDcNUn-jm6tMA.jpeg)
 
