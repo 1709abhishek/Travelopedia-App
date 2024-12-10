@@ -1,29 +1,29 @@
 "use client"
 
+import React from "react"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
-import { X } from 'lucide-react'
 import { useState } from "react"
-import { createTripService } from "../services/BudgetServices"
+import { createTripService, updateTripService } from "../services/BudgetServices"
+import { toast } from "react-toastify"
 
 interface ItineraryItem {
   time: string
   activity: string
+  day: string
 }
 
-export function AddTripModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
-  const [destination, setDestination] = useState("")
-  const [country, setCountry] = useState("")
-  const [itinerary, setItinerary] = useState<ItineraryItem[]>([
-    { time: "", activity: "" }
-  ])
-  const [duration, setDuration] = useState("")
-  const [date, setDate] = useState("")
-  const [description, setDescription] = useState("")
+export function AddTripModal({ isOpen, onClose, fetchTrips, trip }: { isOpen: boolean; onClose: () => void, fetchTrips: () => void, trip?: any }) {
+  const [destination, setDestination] = useState(trip?.destination || "")
+  const [country, setCountry] = useState(trip?.country || "")
+  const [itinerary, setItinerary] = useState<ItineraryItem[]>(trip?.itinerary || [{ time: "", activity: "", day: "" }])
+  const [duration, setDuration] = useState(trip?.duration || "")
+  const [date, setDate] = useState(trip?.date || "")
+  const [description, setDescription] = useState(trip?.description || "")
 
   const addItineraryItem = () => {
-    setItinerary([...itinerary, { time: "", activity: "" }])
+    setItinerary([...itinerary, { time: "", activity: "", day: "" }])
   }
 
   const updateItineraryItem = (index: number, field: keyof ItineraryItem, value: string) => {
@@ -42,17 +42,27 @@ export function AddTripModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
       description,
       itinerary
     }
-    // Add your form submission logic here
     const jwttoken = localStorage.getItem('token')
-    
-    const response = createTripService(data, jwttoken)
-    console.log(response)
-    onClose()
+    try {
+      if (trip) {
+        // Update existing trip
+        await updateTripService(jwttoken, trip.id, data)
+        toast.success("Trip updated successfully!")
+      } else {
+        // Create new trip
+        await createTripService(data, jwttoken)
+        toast.success("Trip created successfully!")
+        onClose()
+      }
+      await fetchTrips()
+    } catch (error) {
+      toast.error("An error occurred while saving the trip.")
+    }
   }
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[600px] bg-[#1a1b26] border-gray-800 text-white">
+      <DialogContent className="bg-gray-900 text-white sm:max-w-[600px] sm:p-8 p-4 max-h-[500px] overflow-y-auto">
         <DialogHeader>
           <div className="flex justify-between items-center">
             <div>
@@ -61,14 +71,14 @@ export function AddTripModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
                   placeholder="Destination"
                   value={destination}
                   onChange={(e) => setDestination(e.target.value)}
-                  className="bg-transparent border-none text-xl font-semibold placeholder:text-gray-400"
+                  className="bg-transparent border-gray-700 text-gray-300 mt-2"
                 />
               </DialogTitle>
               <Input
                 placeholder="Country"
                 value={country}
                 onChange={(e) => setCountry(e.target.value)}
-                className="bg-transparent border-none text-gray-400 placeholder:text-gray-500"
+                className="bg-transparent border-gray-700 text-gray-300 mt-2"
               />
               <Input
                 placeholder="Duration (days)"
@@ -90,20 +100,20 @@ export function AddTripModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
                 className="bg-transparent border-gray-700 text-gray-300 mt-2"
               />
             </div>
-            <Button
-              variant="ghost"
-              className="h-6 w-6 p-0 text-gray-400 hover:text-white"
-              onClick={onClose}
-            >
-              <X className="h-4 w-4" />
-            </Button>
+            
           </div>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-4">
             {itinerary.map((item, index) => (
-              <div key={index} className="grid grid-cols-[100px,1fr] gap-4">
+              <div key={index} className="grid grid-cols-[75px,1fr,3fr] gap-4">
+                <Input
+                  placeholder="Day"
+                  value={item.day}
+                  onChange={(e) => updateItineraryItem(index, "day", e.target.value)}
+                  className="bg-transparent border-gray-700 text-gray-300"
+                />
                 <Input
                   type="time"
                   value={item.time}
@@ -116,6 +126,7 @@ export function AddTripModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
                   onChange={(e) => updateItineraryItem(index, "activity", e.target.value)}
                   className="bg-transparent border-gray-700 text-gray-300"
                 />
+                
               </div>
             ))}
           </div>
@@ -125,7 +136,7 @@ export function AddTripModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
               type="button"
               variant="outline"
               onClick={addItineraryItem}
-              className="border-gray-700 text-gray-300 hover:bg-gray-800"
+              className="bg-blue-600 hover:bg-blue-700 text-white"
             >
               Add Activity
             </Button>
@@ -133,7 +144,7 @@ export function AddTripModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
               type="submit"
               className="bg-blue-600 hover:bg-blue-700 text-white"
             >
-              Save Trip
+              {trip ? "Update Trip" : "Save Trip"}
             </Button>
           </div>
         </form>

@@ -1,9 +1,8 @@
 package com.travelopedia.fun.budget_service.beans;
 
+import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
-
-import jakarta.persistence.*;
 
 @Entity
 @Table(name = "trips")
@@ -42,6 +41,7 @@ public class Trip {
     public void setEmail(String email) {
         this.email = email;
     }
+
 
     public String getDestination() {
         return destination;
@@ -91,12 +91,12 @@ public class Trip {
         this.itinerary = itinerary;
     }
 
+
 }
 
 @Embeddable
 class ItineraryItem {
     private String time;
-    @Column(length = 5000)
     private String activity;
     private String day;
 

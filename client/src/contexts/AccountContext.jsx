@@ -63,11 +63,9 @@ const AccountContextProvider = (props) => {
     try {
       console.log('Fetching profile details...');
       const email = localStorage.getItem('user');
-      console.log('Email:', email);
       const jwt = localStorage.getItem('token');
-      const response = await getUserDetailsService(email, jwt);
+      const response = await getUserDetailsService(jwt, email);
       const profile = response.data;
-      console.log('Profile:', profile);
       setFirstName(profile.firstName);
       setLastName(profile.lastName);
       setPhoneNumber(profile.phoneNumber);
@@ -75,19 +73,14 @@ const AccountContextProvider = (props) => {
       setCity(profile.city);
       setCountry(profile.country);
       setBio(profile.bio);
-      setPlaceTravelled(profile.placeTravelled);
-      setWishlist(profile.wishlist);
+      setPlacesTravelled(profile.placesTravelled || []);
+      setWishlist(profile.wishlist || []);
+
       setTravelQuote(profile.travelQuote);
-      setUsername(profile.username);
     } catch (error) {
       console.error('Failed to fetch profile details:', error.response ? error.response.data : error.message);
     }
   };
-  React.useEffect(() => {
-    
-  
-    fetchProfileDetails();
-  }, []);
 
   return (
     <AccountContext.Provider

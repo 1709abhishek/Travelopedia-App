@@ -24,9 +24,9 @@ const Header = () => {
     { to: "/", label: "Home", icon: Home },
     { to: "/signup", label: "Create Account", icon: UserRoundPlus },
     { to: "/signin", label: "Sign In", icon: LogIn },
-    { to: "/create-itinerary", label: "Create Trip", icon: PenTool },
     { to: "/explore", label: "Explore", icon: Compass },
     { to: "/blogs", label: "Blogs", icon: BookOpen },
+    { to: "/create-itinerary", label: "Create Trip", icon: PenTool },
     { to: "/log-trip", label: "Your Trips", icon: PenTool },
     { to: "/my-journey", label: "My Journey", icon: Map },
     { to: "/account", label: "Account", icon: User },
@@ -87,7 +87,7 @@ const Header = () => {
           >
             <div className="flex flex-col py-4">
               <ul>
-                {navItems.map((item) => (
+                {filteredNavItems.map((item) => (
                   <li key={item.to}>
                     <Link
                       to={item.to}
